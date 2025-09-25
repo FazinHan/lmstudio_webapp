@@ -34,5 +34,6 @@ pip-delete-this-directory.txt
 # Windows
 Thumbs.db
 
-# certificates
+# certificates and secrets
 *.pem
+*.env

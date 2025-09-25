@@ -1,7 +1,12 @@
 from flask import Flask, render_template, request, jsonify, session
+from dotenv import load_dotenv
 import requests
 import secrets # Used for generating a secure secret key
+from email.message import EmailMessage
 import socket
+import os
+import ssl
+import smtplib
 
 # --- Configuration ---
 # 1. Make sure your LM Studio server is running.
@@ -85,6 +90,41 @@ def get_local_ip():
         s.close()
     return IP
 
+def send_ip_email(ip_address):
+    """Sends an email with the server's IP address."""
+    sender_email = os.getenv("SENDER_EMAIL")
+    password = os.getenv("SENDER_PASSWORD")
+    recipient_email = os.getenv("RECIPIENT_EMAIL")
+
+    if not all([sender_email, password, recipient_email]):
+        print("--> Email credentials not found in .env file. Skipping email.")
+        return
+
+    # Create the email message
+    msg = EmailMessage()
+    msg['Subject'] = f"Your Web App Has Started!"
+    msg['From'] = sender_email
+    msg['To'] = recipient_email
+    
+    access_url = f"https://{ip_address}:5000"
+    content = (
+        f"Your local AI web app is now running.\n\n"
+        f"You can access it from other devices on your network at:\n"
+        f"{access_url}\n\n"
+        f"The server is running on the host with IP: {ip_address}"
+    )
+    msg.set_content(content)
+
+    print("--> Attempting to send IP notification email...")
+    try:
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+            server.login(sender_email, password)
+            server.send_message(msg)
+        print("--> Email sent successfully!")
+    except Exception as e:
+        print(f"--> FAILED to send email. Error: {e}")
+
 # if __name__ == "__main__":
 #     app.run(debug=True, port=5000)
 
@@ -95,6 +135,9 @@ if __name__ == "__main__":
     print(f"Access it from this computer at: https://localhost:5000")
     print(f"Access it from other devices at: https://{local_ip}:5000")
     print("--------------------------")
+
+    # Send the email on startup
+    send_ip_email(local_ip)
 
     # Replace the filenames with the ones mkcert created
     cert_file = 'cert.pem'

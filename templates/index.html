@@ -3,152 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with Local AI</title>
+    <title>Your own personal clanker</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0KOVEMcApdbeGsNNJpGXJBqlmbBfn5pV8J4GVno0hhGQRiCTCoDdD" crossorigin="anonymous">
+    
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlVwcBnGsEcpBevaLPuy3ATiMjiCFoj7rLIXvlEzEWcacGALcGmwSWwSEET" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked-katex-extension@1.0.1/lib/index.umd.js"></script>
     <style>
-    /* 1. Define Color Palette using CSS Variables */
-    :root {
-        --bg-color: #f4f4f9;
-        --container-bg: #ffffff;
-        --header-bg: #f7f7f7;
-        --border-color: #dddddd;
-        --text-color: #333333;
-        --input-bg: #ffffff;
-        --input-border: #cccccc;
-        --ai-message-bg: #e9e9eb;
-        --user-message-bg: #007bff;
-        --user-message-text: #ffffff;
-        --button-bg: #007bff;
-        --button-hover-bg: #0056b3;
-        --button-text: #ffffff;
-        --shadow-color: rgba(0,0,0,0.1);
-    }
-
-    /* 2. Define Dark Mode Palette */
-    @media (prefers-color-scheme: dark) {
+        /* Define Color Palette using CSS Variables */
         :root {
-            --bg-color: #121212;
-            --container-bg: #1e1e1e;
-            --header-bg: #2a2a2a;
-            --border-color: #3a3a3a;
-            --text-color: #e0e0e0;
-            --input-bg: #2a2a2a;
-            --input-border: #444444;
-            --ai-message-bg: #333333;
-            --user-message-bg: #377dff;
+            --bg-color: #f4f4f9;
+            --container-bg: #ffffff;
+            --header-bg: #f7f7f7;
+            --border-color: #dddddd;
+            --text-color: #333333;
+            --input-bg: #ffffff;
+            --input-border: #cccccc;
+            --ai-message-bg: #e9e9eb;
+            --user-message-bg: #007bff;
             --user-message-text: #ffffff;
-            --button-bg: #377dff;
-            --button-hover-bg: #4a8eff;
+            --button-bg: #007bff;
+            --button-hover-bg: #0056b3;
             --button-text: #ffffff;
-            --shadow-color: rgba(0,0,0,0.4);
+            --shadow-color: rgba(0,0,0,0.1);
+            --code-bg: #f0f0f0;
+            --code-text: #222;
         }
-    }
 
-    /* 3. Apply Variables to Elements */
-    body { 
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-        background-color: var(--bg-color); 
-        color: var(--text-color);
-        margin: 0; 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        height: 100vh; 
-    }
-    .chat-container { 
-        width: 90%; 
-        max-width: 800px; 
-        height: 90vh; 
-        background: var(--container-bg); 
-        border-radius: 8px; 
-        box-shadow: 0 4px 12px var(--shadow-color); 
-        display: flex; 
-        flex-direction: column; 
-    }
-    .chat-header { 
-        padding: 20px; 
-        border-bottom: 1px solid var(--border-color); 
-        background: var(--header-bg); 
-        font-weight: bold; 
-        text-align: center; 
-    }
-    .chat-window { 
-        flex-grow: 1; 
-        padding: 20px; 
-        overflow-y: auto; 
-        display: flex; 
-        flex-direction: column; 
-        gap: 15px; 
-    }
-    .message { 
-        padding: 10px 15px; 
-        border-radius: 18px; 
-        max-width: 70%; 
-        line-height: 1.5; 
-    }
-    .user-message { 
-        background-color: var(--user-message-bg); 
-        color: var(--user-message-text); 
-        align-self: flex-end; 
-    }
-    .ai-message { 
-        background-color: var(--ai-message-bg); 
-        color: var(--text-color); 
-        align-self: flex-start; 
-    }
-    .thinking-message { 
-        color: #888; 
-        align-self: flex-start; 
-        font-style: italic; 
-    }
-    .chat-input { 
-        padding: 20px; 
-        border-top: 1px solid var(--border-color); 
-        display: flex; 
-    }
-    #message-input { 
-        flex-grow: 1; 
-        border: 1px solid var(--input-border);
-        background-color: var(--input-bg);
-        color: var(--text-color);
-        border-radius: 20px; 
-        padding: 10px 15px; 
-        font-size: 16px; 
-        outline: none; 
-    }
-    #message-input:focus { 
-        border-color: var(--user-message-bg); 
-    }
-    #send-button { 
-        background: var(--button-bg); 
-        color: var(--button-text); 
-        border: none; 
-        border-radius: 20px; 
-        padding: 10px 20px; 
-        margin-left: 10px; 
-        cursor: pointer; 
-        font-size: 16px; 
-    }
-    #send-button:hover { 
-        background: var(--button-hover-bg); 
-    }
+        /* Define Dark Mode Palette */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --container-bg: #1e1e1e;
+                --header-bg: #2a2a2a;
+                --border-color: #3a3a3a;
+                --text-color: #e0e0e0;
+                --input-bg: #2a2a2a;
+                --input-border: #444444;
+                --ai-message-bg: #333333;
+                --user-message-bg: #377dff;
+                --button-bg: #377dff;
+                --button-hover-bg: #4a8eff;
+                --shadow-color: rgba(0,0,0,0.4);
+                --code-bg: #2d2d2d;
+                --code-text: #f1f1f1;
+            }
+        }
 
-    /* Mobile Responsiveness */
-    @media (max-width: 768px) {
-        body {
-            display: block;
+        /* Base Styles */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            margin: 0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
         }
-        .chat-container {
-            width: 100%;
-            height: 100vh;
-            max-width: none;
-            border-radius: 0;
-            box-shadow: none;
+        .chat-container { width: 90%; max-width: 800px; height: 90vh; background: var(--container-bg); border-radius: 8px; box-shadow: 0 4px 12px var(--shadow-color); display: flex; flex-direction: column; }
+        .chat-header { padding: 20px; border-bottom: 1px solid var(--border-color); background: var(--header-bg); font-weight: bold; text-align: center; }
+        .chat-window { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .message { padding: 10px 15px; border-radius: 18px; max-width: 70%; line-height: 1.5; word-wrap: break-word; }
+        .user-message { background-color: var(--user-message-bg); color: var(--user-message-text); align-self: flex-end; }
+        .ai-message { background-color: var(--ai-message-bg); color: var(--text-color); align-self: flex-start; }
+        .thinking-message { color: #888; align-self: flex-start; font-style: italic; }
+        .chat-input { padding: 20px; border-top: 1px solid var(--border-color); display: flex; }
+        #message-input { flex-grow: 1; border: 1px solid var(--input-border); background-color: var(--input-bg); color: var(--text-color); border-radius: 20px; padding: 10px 15px; font-size: 16px; outline: none; }
+        #message-input:focus { border-color: var(--user-message-bg); }
+        #send-button { background: var(--button-bg); color: var(--button-text); border: none; border-radius: 20px; padding: 10px 20px; margin-left: 10px; cursor: pointer; font-size: 16px; }
+        #send-button:hover { background: var(--button-hover-bg); }
+
+        /* --- 3. Add CSS for Markdown Elements --- */
+        .ai-message p { margin: 0 0 10px; }
+        .ai-message p:last-child { margin-bottom: 0; }
+        .ai-message ul, .ai-message ol { padding-left: 20px; margin: 10px 0; }
+        .ai-message li { margin-bottom: 5px; }
+        .ai-message pre { background-color: var(--code-bg); color: var(--code-text); padding: 15px; border-radius: 8px; overflow-x: auto; font-family: 'Courier New', Courier, monospace; font-size: 14px; }
+        .ai-message code { background-color: var(--code-bg); color: var(--code-text); padding: 2px 4px; border-radius: 4px; font-family: 'Courier New', Courier, monospace; }
+        .ai-message pre code { padding: 0; background-color: transparent; }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            body { display: block; }
+            .chat-container { width: 100%; height: 100vh; max-width: none; border-radius: 0; box-shadow: none; }
+            .chat-input { padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
         }
-        .chat-input {
-            padding-bottom: calc(20px + env(safe-area-inset-bottom));
-        }
-    }
-</style>
+    </style>
 </head>
 <body>
 
@@ -170,16 +114,29 @@
     const messageInput = document.getElementById('message-input');
     const chatWindow = document.getElementById('chat-window');
 
+    // --- FINAL CORRECTION: Pass the extension directly to marked.use() ---
+    // The marked.use() function expects the extension object directly, not wrapped in another object.
+    marked.use(
+      markedKatex({
+        throwOnError: false,
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "$", right: "$", display: true },
+          { left: "\\(", right: "\\)", display: true }
+        ]
+      })
+    );
+
+    // The rest of the script remains exactly the same.
     chatForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Prevent page reload
+        event.preventDefault();
         const userMessage = messageInput.value.trim();
         if (!userMessage) return;
 
-        // Display user message
-        appendMessage(userMessage, 'user-message');
+        appendMessage(userMessage, 'user-message', false);
         messageInput.value = '';
 
-        // Show thinking indicator
         const thinkingIndicator = appendMessage('AI is thinking...', 'thinking-message');
 
         try {
@@ -189,30 +146,31 @@
                 body: JSON.stringify({ message: userMessage })
             });
 
-            // Remove thinking indicator
             thinkingIndicator.remove();
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
 
             const data = await response.json();
-            // Display AI response
-            appendMessage(data.response, 'ai-message');
+            appendMessage(data.response, 'ai-message', true);
+
         } catch (error) {
             console.error('Error:', error);
             appendMessage('Sorry, something went wrong. Please check the console.', 'ai-message');
         }
     });
 
-    function appendMessage(text, className) {
+    function appendMessage(text, className, isMarkdown = false) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${className}`;
-        messageDiv.textContent = text;
+
+        if (isMarkdown) {
+            messageDiv.innerHTML = marked.parse(text);
+        } else {
+            messageDiv.textContent = text;
+        }
+
         chatWindow.appendChild(messageDiv);
-        // Scroll to the latest message
         chatWindow.scrollTop = chatWindow.scrollHeight;
-        return messageDiv; // Return the element for potential removal (like the thinking indicator)
+        return messageDiv;
     }
 </script>
 

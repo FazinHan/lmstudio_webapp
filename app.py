@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, session
 import requests
 import secrets # Used for generating a secure secret key
+import socket
 
 # --- Configuration ---
 # 1. Make sure your LM Studio server is running.
@@ -72,12 +73,31 @@ def chat():
 
     return jsonify({"response": ai_response})
 
+def get_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # Doesn't have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
 # if __name__ == "__main__":
 #     app.run(debug=True, port=5000)
 
 if __name__ == "__main__":
+
+    local_ip = get_local_ip()
+    print("--- Web App is Running ---")
+    print(f"Access it from this computer at: https://localhost:5000")
+    print(f"Access it from other devices at: https://{local_ip}:5000")
+    print("--------------------------")
+
     # Replace the filenames with the ones mkcert created
-    cert_file = '172.20.110.168+2.pem'
-    key_file = '172.20.110.168+2-key.pem'
+    cert_file = 'cert.pem'
+    key_file = 'key.pem'
 
     app.run(host='0.0.0.0', debug=True, port=5000, ssl_context=(cert_file, key_file))

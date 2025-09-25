@@ -1,0 +1,35 @@
+# --- Python ---
+# Byte-compiled / optimized / C files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Virtual Environments ---
+# Common names for virtual environment folders
+venv/
+env/
+.venv/
+.env/
+
+# --- Flask ---
+# Flask's instance folder for local configuration
+instance/
+
+# --- Dependency Management ---
+# Pip-related
+pip-log.txt
+pip-delete-this-directory.txt
+*.egg-info/
+.installed.cfg
+
+# --- Editor / IDE ---
+# VS Code
+.vscode/
+# PyCharm
+.idea/
+
+# --- Operating System ---
+# macOS
+.DS_Store
+# Windows
+Thumbs.db

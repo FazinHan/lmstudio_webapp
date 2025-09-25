@@ -76,4 +76,8 @@ def chat():
 #     app.run(debug=True, port=5000)
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', debug=True, port=5000)
+    # Replace the filenames with the ones mkcert created
+    cert_file = '172.20.110.168+2.pem'
+    key_file = '172.20.110.168+2-key.pem'
+
+    app.run(host='0.0.0.0', debug=True, port=5000, ssl_context=(cert_file, key_file))

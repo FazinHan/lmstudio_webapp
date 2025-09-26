@@ -33,6 +33,7 @@ pip-delete-this-directory.txt
 .DS_Store
 # Windows
 Thumbs.db
+*.bat
 
 # certificates and secrets
 *.pem

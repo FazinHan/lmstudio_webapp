@@ -125,6 +125,27 @@ def send_ip_email(ip_address):
     except Exception as e:
         print(f"--> FAILED to send email. Error: {e}")
 
+# --- ADD THIS NEW ROUTE ---
+@app.route("/get-model-name")
+def get_model_name():
+    """Queries the LM Studio server for the currently loaded model's name."""
+    try:
+        response = requests.get("http://localhost:1234/v1/models")
+        response.raise_for_status()
+        models_data = response.json()
+        
+        # The first model in the list is the one that's loaded
+        model_name = models_data["data"][0]["id"]
+        return jsonify({"model_name": model_name})
+        
+    except requests.exceptions.RequestException as e:
+        # If we can't connect to LM Studio, return a fallback name
+        print(f"Error connecting to LM Studio API: {e}")
+        return jsonify({"model_name": "Local Model (Not Found)"}), 500
+    except (KeyError, IndexError):
+        # If the response format is unexpected
+        return jsonify({"model_name": "Local Model (Invalid Response)"}), 500
+
 # if __name__ == "__main__":
 #     app.run(debug=True, port=5000)
 

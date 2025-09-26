@@ -98,8 +98,9 @@
 
 <div class="chat-container">
     <div class="chat-header">
-        <p>Your Personal Clanker</p>
-        <p style="font-size:12px; opacity:0.75;">running on falinux</p>
+        <p>Your Personal Clanker</p> 
+        <p style="font-size:12px; opacity:0.75;"><span id="model-name">...</span></p>
+        <!-- <p style="font-size:8px; opacity:0.75;">running on falinux</p> -->
     </div>
     <div class="chat-window" id="chat-window">
         </div>
@@ -110,6 +111,23 @@
 </div>
 
 <script>
+
+    // --- NEW: Fetch and display the model name on page load ---
+    document.addEventListener('DOMContentLoaded', async () => {
+        const modelNameElement = document.getElementById('model-name');
+        try {
+            const response = await fetch('/get-model-name');
+            if (!response.ok) {
+                throw new Error('Failed to fetch model name');
+            }
+            const data = await response.json();
+            modelNameElement.textContent = data.model_name;
+        } catch (error) {
+            console.error('Error fetching model name:', error);
+            modelNameElement.textContent = 'Local Model';
+        }
+    });
+
     const chatForm = document.getElementById('chat-form');
     const messageInput = document.getElementById('message-input');
     const chatWindow = document.getElementById('chat-window');

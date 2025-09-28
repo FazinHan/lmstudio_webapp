@@ -14,7 +14,7 @@ import smtplib
 MODEL_IDENTIFIER = "local-model"
 
 # 3. (Optional) Set a custom system prompt.
-SYSTEM_PROMPT = "You are a helpful and friendly AI assistant. I prefer concise responses."
+SYSTEM_PROMPT = os.getenv("SYSTEM_PROMPT")
 
 # --- API Details ---
 LMSTUDIO_API_URL = "http://127.0.0.1:1234/v1/chat/completions"
